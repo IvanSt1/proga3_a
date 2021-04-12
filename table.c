@@ -14,8 +14,10 @@ Item * find(Table *t,int k1, char *k2){
         i++;
     }
     printf("%d\n",i);
-    if(i==t->csize) return NULL;
-    else return t->ks1[i].info;
+    if(i==t->csize)
+        return NULL;
+    else
+        return t->ks1[i].info;
 }
 
 int insert(Table* t, int* k1, char *k2, char * info){

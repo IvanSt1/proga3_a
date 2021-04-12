@@ -30,7 +30,7 @@ char *Get_Str(int *len){
         n = scanf("%79[^\n]", buf);
         q += strlen(buf);
         if (n > 0) {
-            res = realloc(res, q * sizeof(char));
+            res = realloc(res, q * sizeof(char)+1);
             strcat(res, buf);
             *len=strlen(buf);
         }
