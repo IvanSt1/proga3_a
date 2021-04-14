@@ -15,5 +15,8 @@ typedef struct Table{
 } Table;
 int insert(Table* ptab, int* k1, char *k2, char * info);
 Item * find(Table *ptab,int k1, char *k2);
+Item * findk1(Table *t,int k1);
+int findk2(Table *t,char* k2);
+int findk2_fromBegin(Table *t,char *k2);
 int delete(Table *ptab, int k1, char *k2);
 #endif //PROGA3_A_TABLE_H

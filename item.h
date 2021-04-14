@@ -6,7 +6,8 @@
 #define PROGA3_A_ITEM_H
 typedef struct Item{
     char* inf;
-    int* key1;
+    int key1;
     char* key2;
+    int realise;
 } Item;
 #endif //PROGA3_A_ITEM_H

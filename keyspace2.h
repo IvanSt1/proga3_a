@@ -5,6 +5,7 @@
 #ifndef PROGA3_A_KEYSPACE2_H
 #define PROGA3_A_KEYSPACE2_H
 #include "item.h"
+#define maxstrinsize 10
 typedef struct KeySpace2{
     char* key;
     Item *info;

@@ -20,20 +20,33 @@ int Get_Int(int* a){
     return n < 0 ? 0 : 1;
 }
 
-char *Get_Str(int *len){
-    int  q=0,n;
+char *Get_Str(){
+    int  len=0,n;
     char buf[80];
     char *res = malloc(80 * sizeof(char));
     *res = '\0';
     scanf("%*[\n]");
     do {
         n = scanf("%79[^\n]", buf);
-        q += strlen(buf);
+        len += strlen(buf);
         if (n > 0) {
-            res = realloc(res, q * sizeof(char)+1);
+            res = realloc(res, len * sizeof(char)+1);
             strcat(res, buf);
-            *len=strlen(buf);
         }
+    } while ( n != 0 && n != -1);
+    if (n == -1) {
+        free(res);
+        return NULL;
+    }
+    return res;
+}
+char *Get_Strk2(){
+    int  len=0,n;
+    char *res = malloc((maxstrinsize+1) * sizeof(char));
+    *res = '\0';
+    scanf("%*[\n]");
+    do {
+        n = scanf("%10[^\n]", res);
     } while ( n != 0 && n != -1);
     if (n == -1) {
         free(res);
@@ -67,7 +80,7 @@ int D_Find(Table*ptab){
     printf("Enter key1: -->");
     Get_Int(&k1);
     printf("Enter key2: -->");
-    k2=Get_Str(&l);
+    k2=Get_Strk2();
 
     if(k2==NULL)
         return 0;
@@ -77,7 +90,31 @@ int D_Find(Table*ptab){
         return 1;
     }
     else{
-        printf("%s\n%d,%d,%s\n",rc->key1,rc->key2, rc->inf);
+        printf("key1: %d | key2: %s | info: %s | realise: %d\n",rc->key1,rc->key2,rc->inf,rc->realise);
+    }
+    return 1;
+}
+int D_Find_All_Versions(Table *ptab){
+    int l;
+    int k1,i;
+    char* k2=NULL;
+    KeySpace2 rc;
+    printf("Enter key2: -->");
+    k2=Get_Strk2();
+    if(k2==NULL)
+        return 0;
+    i=findk2_fromBegin(ptab,k2);
+    if(i==ptab->csize){
+        printf("There is not such key.");
+        return 1;
+    }
+    else{
+        rc=ptab->ks2[i];
+        printf("key1: %d | key2: %s | info: %s | realise: %d\n",rc.key,rc.key,rc.info->inf,rc.realise);
+        while (rc.next!=NULL){
+            rc=*rc.next;
+            printf("key1: %d | key2: %s | info: %s | realise: %d\n",rc.key,rc.key,rc.info->inf,rc.realise);
+        }
     }
     return 1;
 }
@@ -91,11 +128,11 @@ int D_Add(Table*ptab){
     printf("Enter key1: -->");
     Get_Int(&k1);
     printf("Enter key2: -->");
-    k2=Get_Str(&l);
+    k2=Get_Strk2();
     if(k2==NULL)
         return 0;
     printf("Enter info:\n");
-    info=Get_Str(&l);
+    info=Get_Str();
     if(info==NULL)
         return 0;
     rc=insert(ptab,k1,k2,info);
@@ -108,9 +145,9 @@ int D_Delete(Table *ptab){
     int rc,k1;
     int l;
     printf("Enter key1: -->");
-    Get_Int(k1);
-    printf("Enter key: -->");
-    k2=Get_Str(&l);
+    Get_Int(&k1);
+    printf("Enter key2: -->");
+    k2=Get_Strk2();
     if(k2==NULL)
         return 0;
     rc=delete(ptab,k1,k2);
@@ -119,9 +156,10 @@ int D_Delete(Table *ptab){
     return 1;
 }
 
+
 int D_Show(Table*ptab){
     for(int i=0;i<ptab->csize;++i){
-        printf("key1:%d\nkey2:%s\ninfo:%s\n",ptab->ks1[i].key,ptab->ks2[i].key,ptab->ks1[i].info->inf);
+        printf("key1: %d | parkey:%d |key2: %s | info: %s | realise: %d\n",ptab->ks1[i].key,ptab->ks1[i].par,ptab->ks2[i].key,ptab->ks1[i].info->inf,ptab->ks2[i].realise);
     }
     return 1;
 }
