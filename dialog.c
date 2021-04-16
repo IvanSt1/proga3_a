@@ -11,7 +11,7 @@ int Get_Int(int* a){
     int n=0;
     while (n==0){
         n = scanf("%d", a);
-        if (n==0 || *a<0){
+        if (n==0 || *a<=0){
             printf("Error reading positive integer value\n");
             scanf("%*[^\n]");
             n=0;
@@ -42,11 +42,17 @@ char *Get_Str(){
 }
 char *Get_Strk2(){
     int  len=0,n;
-    char *res = malloc((maxstrinsize+1) * sizeof(char));
+    char buf[80];
+    char *res = malloc(80 * sizeof(char));
     *res = '\0';
     scanf("%*[\n]");
     do {
-        n = scanf("%10[^\n]", res);
+        n = scanf("%79[^\n]", buf);
+        len += strlen(buf);
+        if (n > 0) {
+            res = realloc(res, len * sizeof(char)+1);
+            strcat(res, buf);
+        }
     } while ( n != 0 && n != -1);
     if (n == -1) {
         free(res);
@@ -69,6 +75,7 @@ int dialog(const char *msgs[], int n){
         if(p==0)
             rc=0;
     }while(rc<0 || rc>=n);
+    rc--;
     return rc;
 }
 

@@ -7,7 +7,7 @@
 #include "table.h"
 #include <stdlib.h>
 #include <stdio.h>
-const char *msgs[]={"0. Quite", "1. Add", "2. Find","3.Find All Versions", "4. Delete", "5. Show"};
+const char *msgs[]={"1. Quite","2. Add", "3. Find","4.Find All Versions", "5. Delete", "6. Show"};
 const int NMgsgs=sizeof(msgs)/ sizeof(msgs[0]);
 int (*f[])(Table *)={NULL,D_Add,D_Find,D_Find_All_Versions,D_Delete, D_Show};
 int main(){

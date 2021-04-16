@@ -67,7 +67,7 @@ int insert(Table* t, int* k1, char *k2, char * info){
             if (i>=0){
                 t->ks2[t->csize-1].key = k2;
                 t->ks2[t->csize-1].realise = t->ks2[i].realise+1;
-                t->ks2[i].next=malloc(sizeof(KeySpace2));
+                t->ks2[i].next=(KeySpace2 *)malloc(sizeof(KeySpace2));
                 (*t->ks2[i].next)=t->ks2[t->csize-1];
                 item->realise=t->ks2[i].realise+1;
                 t->ks2[t->csize-1].info = item;
@@ -88,7 +88,7 @@ int insert(Table* t, int* k1, char *k2, char * info){
 
 int delete(Table *t, int k1, char *k2){
     int i=0;
-    while(i<t->csize && (strcmp(t->ks2[i].key,k2))&&(t->ks1[i].key==k1)){
+    while(i<t->csize && (strcmp(t->ks2[i].key,k2))&&(t->ks1[i].key!=k1)){
         i++;
     }
     if(i==t->csize) return 0;
