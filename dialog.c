@@ -171,4 +171,26 @@ int D_Show(Table*ptab){
     return 1;
 }
 
+int D_ParFind(Table *ptab){
+    int l;
+    int park;
+    Item* rc=NULL;
+    printf("Enter parkey: -->");
+    Get_Int(&park);
+
+    int i=0;
+    rc=findkpar(ptab, park, &i);
+    if(rc==NULL){
+        printf("There is not such key.");
+        return 1;
+    }
+    else{
+        printf("key1: %d | key2: %s | info: %s | realise: %d\n",rc->key1,rc->key2,rc->inf,rc->realise);
+        while (rc!=NULL){
+            rc=findkpar(ptab, park, &i);
+            printf("key1: %d | key2: %s | info: %s | realise: %d\n",rc->key1,rc->key2,rc->inf,rc->realise);
+        }
+    }
+    return 1;
+}
 

@@ -7,9 +7,9 @@
 #include "table.h"
 #include <stdlib.h>
 #include <stdio.h>
-const char *msgs[]={"1. Quite","2. Add", "3. Find","4.Find All Versions", "5. Delete", "6. Show"};
+const char *msgs[]={"1. Quite","2. Add", "3. Find","4.Find All Versions", "5. Delete", "6. Show","7. Par Find"};
 const int NMgsgs=sizeof(msgs)/ sizeof(msgs[0]);
-int (*f[])(Table *)={NULL,D_Add,D_Find,D_Find_All_Versions,D_Delete, D_Show};
+int (*f[])(Table *)={NULL,D_Add,D_Find,D_Find_All_Versions,D_Delete, D_Show,D_ParFind};
 int main(){
     int size;
     printf("Enter max size of table\n");

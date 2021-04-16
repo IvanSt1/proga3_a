@@ -28,6 +28,15 @@ Item * findk1(Table *t,int k1){
     else
         return t->ks1[i].info;
 }
+Item * findkpar(Table *t,int kpar, int i){
+    while((i<t->csize) && (t->ks1[i].par!=kpar) ){
+        i++;
+    }
+    if(i==t->csize)
+        return NULL;
+    else
+        return t->ks1[i].info;
+}
 
 int findk2(Table *t,char *k2){
     int i=t->csize-2;
