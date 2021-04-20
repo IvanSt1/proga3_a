@@ -9,11 +9,16 @@
 #include <stdlib.h>
 #include <stdio.h>
 Item * find(Table *t, int k1, char *k2){
-    int i=0;
-    while((i<t->csize1) && (t->ks1[i].key!=k1)&&(strcmp(t->ks2[i].key,k2))) {
-        i++;
+    int i;
+    for (i=0;i<t->msize1;i++){
+        if (t->ks1[i].key!=0){
+            if((t->ks1[i].key==k1)&&(strcmp(t->ks1[i].info->key2,k2)==0)) {
+                break;
+            }
+        }
     }
-    if(i==t->csize1)
+
+    if(i==t->msize1)
         return NULL;
     else
         return t->ks1[i].info;

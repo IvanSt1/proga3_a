@@ -52,7 +52,6 @@ int dialog(const char *msgs[], int n){
 }
 
 int D_Find(Table*ptab){
-    /*int l;
     int k1;
     char* k2=NULL;
     Item* rc=NULL;
@@ -63,15 +62,18 @@ int D_Find(Table*ptab){
 
     if(k2==NULL)
         return 0;
-    rc=find(ptab,k1,k2);
-    if(rc==NULL){
-        printf("There is not such key.");
-        return 1;
+    if (ptab->csize1!=0) {
+        rc = find(ptab, k1, k2);
+        if (rc == NULL) {
+            printf("There is not such key.");
+            return 1;
+        } else {
+            printf("key1: %d | key2: %s | info: %s | realise: %d\n", rc->key1, rc->key2, rc->inf, rc->realise);
+            return 1;
+        }
     }
-    else{
-        printf("key1: %d | key2: %s | info: %s | realise: %d\n",rc->key1,rc->key2,rc->inf,rc->realise);
-    }
-     */
+    else
+        printf("Empty table\n");
     return 1;
 }
 int D_Delete(Table *ptab){
