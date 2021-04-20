@@ -18,6 +18,6 @@ typedef struct Table{
 int insert(Table* ptab, int k1,int par, char* k2, char * info);
 Item * find(Table *ptab,int k1, char *k2);
 Item * findk1(Table *t,int k1);
-Item * findkpar(Table *t,int kpar, int i);
+KeySpace1 * findkpar(Table *t,int kpar, int *kol);
 int delete(Table *ptab, int k1, char *k2);
 #endif //PROGA3_A_TABLE_H

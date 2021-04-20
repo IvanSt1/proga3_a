@@ -110,27 +110,22 @@ int D_Show(Table*ptab){
 }
 
 int D_ParFind(Table *ptab){
-    /*
-    int l;
+    int l=0;
     int park;
-    Item* rc=NULL;
     printf("Enter parkey: -->");
     Get_Int(&park);
-
-    int i=0;
-    rc=findkpar(ptab, park, i);
-    if(rc==NULL){
+    KeySpace1* t;
+    t=findkpar(ptab, park,&l);
+    if(t==NULL){
         printf("There is not such key.");
         return 1;
     }
     else{
-        printf("key1: %d | key2: %s | info: %s | realise: %d\n",rc->key1,rc->key2,rc->inf,rc->realise);
-        while (rc!=NULL){
-            rc=findkpar(ptab, park, i);
-            printf("key1: %d | key2: %s | info: %s | realise: %d\n",rc->key1,rc->key2,rc->inf,rc->realise);
+        for(int i=0;i<l;i++){
+            printf("key1: %d | parkey:%d |key2: %s | info: %s | realise: %d\n", t[i].key, t[i].par,t[i].info->key2, t[i].info->inf, t[i].info->realise);
         }
     }
-     */
+
     return 1;
 }
 

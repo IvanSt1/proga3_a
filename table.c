@@ -33,14 +33,23 @@ Item * findk1(Table *t,int k1){
     else
         return t->ks1[i].info;
 }
-Item * findkpar(Table *t,int kpar, int i){
-    while((i<t->csize1) && (t->ks1[i].par!=kpar) ){
-        i++;
+KeySpace1 * findkpar(Table *t,int kpar,int *kol){
+    KeySpace1 *ks1;
+    *kol=0;
+    ks1=(KeySpace1*)calloc(sizeof(KeySpace1),(*kol+1));
+    for(int i=0; i<t->msize1;i++){
+        if(t->ks1[i].key!=0){
+            if(t->ks1[i].par==kpar){
+                ks1=realloc( ks1,sizeof(KeySpace1)* (*kol + 1));
+                ks1[*kol]=t->ks1[i];
+                (*kol)++;
+            }
+        }
     }
-    if(i==t->csize1)
+    if (*kol==0)
         return NULL;
     else
-        return t->ks1[i].info;
+        return ks1;
 }
 
 
