@@ -1,64 +1,36 @@
-#include <stdio.h>
-#include <malloc.h>
-#include <stdlib.h>
+#include"dialog.h"
 #include <string.h>
-#include "table.h"
 #include "keyspace1.h"
 #include "keyspace2.h"
 #include "item.h"
-
-int Get_Int(int* a){
-    int n=0;
-    while (n==0){
-        n = scanf("%d", a);
-        if (n==0 || *a<=0){
-            printf("Error reading positive integer value\n");
-            scanf("%*[^\n]");
-            n=0;
-        }
-    }
-    return n < 0 ? 0 : 1;
-}
-
-char *Get_Str(){
-    int  len=0,n;
-    char buf[80];
-    char *res = malloc(80 * sizeof(char));
-    *res = '\0';
-    scanf("%*[\n]");
-    do {
-        n = scanf("%79[^\n]", buf);
-        len += strlen(buf);
-        if (n > 0) {
-            res = realloc(res, len * sizeof(char)+1);
-            strcat(res, buf);
-        }
-    } while ( n != 0 && n != -1);
-    if (n == -1) {
-        free(res);
-        return NULL;
-    }
-    return res;
-}
-char *Get_Strk2(){
-    int  len=0,n;
-    char buf[80];
-    char *res = malloc(80 * sizeof(char));
-    *res = '\0';
-    scanf("%*[\n]");
-    do {
-        n = scanf("%79[^\n]", buf);
-        len += strlen(buf);
-        if (n > 0) {
-            res = realloc(res, len * sizeof(char)+1);
-            strcat(res, buf);
-        }
-    } while ( n != 0 && n != -1);
-    if (n == -1) {
-        free(res);
-        return NULL;
-    }
-    return res;
+#include "dialog.h"
+#include "Get.h"
+#include "table.h"
+#include <stdlib.h>
+#include <stdio.h>
+const char *errmsgs[]={"OK","Duplicate key", "Table overflow", "Wrong parent key"};
+int D_Add(Table*ptab){
+    int rc;
+    int l;
+    int k1;
+    int par;
+    char* k2=NULL;
+    char* info;
+    printf("Enter key1: -->");
+    Get_Int(&k1);
+    printf("Enter parent key: -->");
+    Get_Int0(&par);
+    printf("Enter key2: -->");
+    k2=Get_Strk2(ptab);
+    if(k2==NULL)
+        return 0;
+    printf("Enter info:\n");
+    info=Get_Str();
+    if(info==NULL)
+        return 0;
+    rc=insert(ptab,k1,par,k2,info);
+    printf("%s: %d, %s\n",errmsgs[rc],k1,k2);
+    return 1;
 }
 
 int dialog(const char *msgs[], int n){
@@ -74,7 +46,7 @@ int dialog(const char *msgs[], int n){
         p=Get_Int(&rc);
         if(p==0)
             rc=0;
-    }while(rc<0 || rc>=n);
+    }while(rc<0 || rc>n);
     rc--;
     return rc;
 }
@@ -87,7 +59,7 @@ int D_Find(Table*ptab){
     printf("Enter key1: -->");
     Get_Int(&k1);
     printf("Enter key2: -->");
-    k2=Get_Strk2();
+    k2=Get_Strk2(ptab);
 
     if(k2==NULL)
         return 0;
@@ -101,52 +73,6 @@ int D_Find(Table*ptab){
     }
     return 1;
 }
-int D_Find_All_Versions(Table *ptab){
-    int l;
-    int k1,i;
-    char* k2=NULL;
-    KeySpace2 rc;
-    printf("Enter key2: -->");
-    k2=Get_Strk2();
-    if(k2==NULL)
-        return 0;
-    i=findk2_fromBegin(ptab,k2);
-    if(i==ptab->csize){
-        printf("There is not such key.");
-        return 1;
-    }
-    else{
-        rc=ptab->ks2[i];
-        printf("key1: %d | key2: %s | info: %s | realise: %d\n",rc.key,rc.key,rc.info->inf,rc.realise);
-        while (rc.next!=NULL){
-            rc=*rc.next;
-            printf("key1: %d | key2: %s | info: %s | realise: %d\n",rc.key,rc.key,rc.info->inf,rc.realise);
-        }
-    }
-    return 1;
-}
-const char *errmsgs[]={"OK","Duplicate key", "Table overflow"};
-int D_Add(Table*ptab){
-    int rc;
-    int l;
-    int k1;
-    char* k2=NULL;
-    char* info;
-    printf("Enter key1: -->");
-    Get_Int(&k1);
-    printf("Enter key2: -->");
-    k2=Get_Strk2();
-    if(k2==NULL)
-        return 0;
-    printf("Enter info:\n");
-    info=Get_Str();
-    if(info==NULL)
-        return 0;
-    rc=insert(ptab,k1,k2,info);
-    printf("%s: %d, %s\n",errmsgs[rc],k1,k2);
-    return 1;
-}
-
 int D_Delete(Table *ptab){
     char* k2=NULL;
     int rc,k1;
@@ -154,7 +80,7 @@ int D_Delete(Table *ptab){
     printf("Enter key1: -->");
     Get_Int(&k1);
     printf("Enter key2: -->");
-    k2=Get_Strk2();
+    k2=Get_Strk2(ptab);
     if(k2==NULL)
         return 0;
     rc=delete(ptab,k1,k2);
@@ -165,8 +91,15 @@ int D_Delete(Table *ptab){
 
 
 int D_Show(Table*ptab){
-    for(int i=0;i<ptab->csize;++i){
-        printf("key1: %d | parkey:%d |key2: %s | info: %s | realise: %d\n",ptab->ks1[i].key,ptab->ks1[i].par,ptab->ks2[i].key,ptab->ks1[i].info->inf,ptab->ks2[i].realise);
+    for(int i=0;i<ptab->msize1;i++) {
+        if (ptab->ks1[i].key != 0) {
+            int a=ptab->ks1[i].key;
+            int b=ptab->ks1[i].par;
+            char *c= ptab->ks1[i].info->key2;
+            char* d=ptab->ks1[i].info->inf;
+            int e=ptab->ks1[i].info->realise;
+            printf("key1: %d | parkey:%d |key2: %s | info: %s | realise: %d\n", ptab->ks1[i].key, ptab->ks1[i].par, ptab->ks1[i].info->key2, ptab->ks1[i].info->inf, ptab->ks1[i].info->realise);
+        }
     }
     return 1;
 }
@@ -179,7 +112,7 @@ int D_ParFind(Table *ptab){
     Get_Int(&park);
 
     int i=0;
-    rc=findkpar(ptab, park, &i);
+    rc=findkpar(ptab, park, i);
     if(rc==NULL){
         printf("There is not such key.");
         return 1;
@@ -187,7 +120,7 @@ int D_ParFind(Table *ptab){
     else{
         printf("key1: %d | key2: %s | info: %s | realise: %d\n",rc->key1,rc->key2,rc->inf,rc->realise);
         while (rc!=NULL){
-            rc=findkpar(ptab, park, &i);
+            rc=findkpar(ptab, park, i);
             printf("key1: %d | key2: %s | info: %s | realise: %d\n",rc->key1,rc->key2,rc->inf,rc->realise);
         }
     }
