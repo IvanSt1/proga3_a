@@ -72,11 +72,9 @@ char* Get_Strk2(Table* t){
 
 
 int Hesh(Table *t, char*s){
-    int i=0;
     int sum=0;
-    while(s[i]!='\0'){
+    for(int i=0; lenstr(s); i++){
         sum+=(int)s[i];
-        i++;
     }
     return (sum%t->strl);
 }
