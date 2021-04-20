@@ -20,8 +20,8 @@ int main(){
     printf("Length of key2\n");
     Get_Int(&len);
     Table table;
-    table.ks1=malloc(sizeof(KeySpace1)*size1);
-    table.ks2=malloc(sizeof(KeySpace2)*size2);
+    table.ks1=calloc(sizeof(KeySpace1),size1);
+    table.ks2=calloc(sizeof(KeySpace2),size2);
     table.msize1=size1;
     table.csize1=0;
     table.msize2=size2;

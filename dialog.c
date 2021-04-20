@@ -52,7 +52,7 @@ int dialog(const char *msgs[], int n){
 }
 
 int D_Find(Table*ptab){
-    int l;
+    /*int l;
     int k1;
     char* k2=NULL;
     Item* rc=NULL;
@@ -71,9 +71,11 @@ int D_Find(Table*ptab){
     else{
         printf("key1: %d | key2: %s | info: %s | realise: %d\n",rc->key1,rc->key2,rc->inf,rc->realise);
     }
+     */
     return 1;
 }
 int D_Delete(Table *ptab){
+    /*
     char* k2=NULL;
     int rc,k1;
     int l;
@@ -86,6 +88,7 @@ int D_Delete(Table *ptab){
     rc=delete(ptab,k1,k2);
     if(rc==0) printf("There is not such key.");
     if(rc==1) printf("Successfull deletion.\n");
+    */
     return 1;
 }
 
@@ -105,6 +108,7 @@ int D_Show(Table*ptab){
 }
 
 int D_ParFind(Table *ptab){
+    /*
     int l;
     int park;
     Item* rc=NULL;
@@ -124,6 +128,7 @@ int D_ParFind(Table *ptab){
             printf("key1: %d | key2: %s | info: %s | realise: %d\n",rc->key1,rc->key2,rc->inf,rc->realise);
         }
     }
+     */
     return 1;
 }
 

@@ -20,10 +20,10 @@ Item * find(Table *t, int k1, char *k2){
 }
 Item * findk1(Table *t,int k1){
     int i=0;
-    while((i<t->csize1) && (t->ks1[i].key!=k1)) {
+    while((i<t->msize1) && (t->ks1[i].key!=k1)) {
         i++;
     }
-    if(i==t->csize1)
+    if(i==t->msize1)
         return NULL;
     else
         return t->ks1[i].info;
@@ -43,7 +43,7 @@ Item * findkpar(Table *t,int kpar, int i){
 
 int insert(Table* t, int k1,int par, char *k2, char * information) {
     int h,i,a=0,x,kol;
-    KeySpace2 *ks2,*ks1;
+    KeySpace2 *ks2,ks1;
     if (findk1(t, k1) != NULL) return 1;
     else {
         if (t->msize1 == t->csize1) return 2;
@@ -65,22 +65,13 @@ int insert(Table* t, int k1,int par, char *k2, char * information) {
                     }
                     else
                     {
-                        ks2=(&t->ks2[h]);
-                        ks1->key=k2;
-                        ks1->next = NULL;
-                        while(t->ks2[h].next!=NULL){
-                            t->ks2[h]=(*t->ks2[h].next);
-                        }
-                        ks1->realise=t->ks2[h].realise+1;
+                        ks1.key=k2;
+                        ks1.next = NULL;
+                        ks1.realise=t->ks2[h].realise+1;
                         item->realise = t->ks2[h].realise+1;
-                        t->ks2[h].next=(KeySpace2*)malloc(sizeof (KeySpace2));
-                        if (item->realise==1){
-                            t->ks2[h].next=ks1;
-                        }
-                        else {
-                            t->ks2[h].next = ks1;
-                            t->ks2[h] = (*ks2);
-                        }
+                        ks1.next=(KeySpace2*)calloc(sizeof (KeySpace2),1);
+                        ks1.next=(&t->ks2[h]);
+                        t->ks2[h]=ks1;
                     }
                 for (int i=0; i<t->msize1;i++) {
                     if(t->ks1[i].key==0) {
