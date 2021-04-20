@@ -129,3 +129,31 @@ int D_ParFind(Table *ptab){
     return 1;
 }
 
+int D_Find_Realise(Table *ptab){
+    char* k2=NULL;
+    int kol=0;
+    printf("Enter key2: -->");
+    k2=Get_Strk2(ptab);
+    if (k2==NULL){
+        return 0;
+    }
+    KeySpace2* ks2;
+    ks2=findk2(ptab,k2);
+    if (ks2==NULL){
+        printf("There is not such key");
+    }
+    else {
+        while (ks2->next != NULL){
+            if(strcmp(ks2->key,k2)==0) {
+                printf("key1: %d| key2: %s | info: %s| realise: %d\n", ks2->info->key1, ks2->key, ks2->info->inf,ks2->realise);
+                kol++;
+            }
+            (*ks2)=(*ks2->next);
+        }
+        if (kol==0){
+            printf("There is not such key");
+        }
+    }
+
+    return 1;
+}

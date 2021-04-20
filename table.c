@@ -80,11 +80,12 @@ int insert(Table* t, int k1,int par, char *k2, char * information) {
                     else
                     {
                         ks1.key=k2;
+                        ks1.info=item;
                         ks1.next = NULL;
                         ks1.realise=t->ks2[h].realise+1;
                         item->realise = t->ks2[h].realise+1;
                         ks1.next=(KeySpace2*)calloc(sizeof (KeySpace2),1);
-                        ks1.next=(&t->ks2[h]);
+                        (*ks1.next)=t->ks2[h];
                         t->ks2[h]=ks1;
                     }
                 for (int i=0; i<t->msize1;i++) {
@@ -101,26 +102,33 @@ int insert(Table* t, int k1,int par, char *k2, char * information) {
         }
     }
 }
+KeySpace2 *findk2(Table*t, char* k2){
+    int h= Hesh(t,k2);
+    if (t->ks2[h].realise==-1){
+        return 0;
+    }
+    else
+        return &(t->ks2[h]);
+}
 
-
-int delete(Table *t, int k1, char *k2){
-    int i=0;
-    while(i<t->csize1 && (strcmp(t->ks2[i].key,k2))&&(t->ks1[i].key!=k1)){
+int delete(Table *t, int k1, char *k2) {
+    int i = 0;
+    while (i < t->csize1 && (strcmp(t->ks2[i].key, k2)) && (t->ks1[i].key != k1)) {
         i++;
     }
-    if(i==t->csize1) return 0;
-    else{
-        int k=t->ks1[i].key;
+    if (i == t->csize1) return 0;
+    else {
+        int k = t->ks1[i].key;
         free(t->ks1[i].info->inf);
         free(t->ks1[i].info);
-        if(i!=t->csize1-1){
-            t->ks1[i]=t->ks1[(t->csize1-1)];
+        if (i != t->csize1 - 1) {
+            t->ks1[i] = t->ks1[(t->csize1 - 1)];
         }
 
-        t->csize1=t->csize1-1;
-        for(int i=0; i<t->csize1;i++){
-            if (t->ks1->par==k)
-                t->ks1->par=0;
+        t->csize1 = t->csize1 - 1;
+        for (int i = 0; i < t->csize1; i++) {
+            if (t->ks1->par == k)
+                t->ks1->par = 0;
         }
         return 1;
     }
