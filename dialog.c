@@ -76,6 +76,25 @@ int D_Find(Table*ptab){
         printf("Empty table\n");
     return 1;
 }
+int D_Findk1(Table*ptab){
+    int k1;
+    Item* rc=NULL;
+    printf("Enter key1: -->");
+    Get_Int(&k1);
+    if (ptab->csize1!=0) {
+        rc = findk1(ptab, k1);
+        if (rc == NULL) {
+            printf("There is not such key.");
+            return 1;
+        } else {
+            printf("key1: %d | key2: %s | info: %s | realise: %d\n", rc->key1, rc->key2, rc->inf, rc->realise);
+            return 1;
+        }
+    }
+    else
+        printf("Empty table\n");
+    return 1;
+}
 int D_Delete(Table *ptab){
     /*
     char* k2=NULL;
@@ -129,7 +148,7 @@ int D_ParFind(Table *ptab){
     return 1;
 }
 
-int D_Find_Realise(Table *ptab){
+int D_Find_Realises(Table *ptab){
     char* k2=NULL;
     int kol=0;
     printf("Enter key2: -->");
@@ -150,8 +169,46 @@ int D_Find_Realise(Table *ptab){
             }
             (*ks2)=(*ks2->next);
         }
+        if(strcmp(ks2->key,k2)==0) {
+            printf("key1: %d| key2: %s | info: %s| realise: %d\n", ks2->info->key1, ks2->key, ks2->info->inf,ks2->realise);
+            kol++;
+        }
         if (kol==0){
             printf("There is not such key");
+        }
+    }
+    return 1;
+}
+int D_Find_Curent_Realise(Table *ptab){
+    char* k2=NULL;
+    int kol=0;
+    int r;
+    printf("Enter key2: -->");
+    k2=Get_Strk2(ptab);
+    if (k2==NULL){
+        return 0;
+    }
+    printf("Enter realise: -->");
+    Get_Int0(&r);
+    KeySpace2* ks2;
+    ks2=findk2(ptab,k2);
+    if (ks2==NULL){
+        printf("There is not such key");
+    }
+    else {
+        while (ks2->next != NULL){
+            if((strcmp(ks2->key,k2)==0)&&(ks2->realise==r)) {
+                printf("key1: %d| key2: %s | info: %s| realise: %d\n", ks2->info->key1, ks2->key, ks2->info->inf,ks2->realise);
+                kol++;
+            }
+            (*ks2)=(*ks2->next);
+        }
+        if((strcmp(ks2->key,k2)==0)&&(ks2->realise==r)) {
+            printf("key1: %d| key2: %s | info: %s| realise: %d\n", ks2->info->key1, ks2->key, ks2->info->inf,ks2->realise);
+            kol++;
+        }
+        if (kol==0){
+            printf("There is not such key and realise");
         }
     }
 
