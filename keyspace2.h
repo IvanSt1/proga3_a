@@ -10,5 +10,6 @@ typedef struct KeySpace2{
     Item *info;
     int  realise;
     struct KeySpace2 *next;
+    struct KeySpace2 *before;
 } KeySpace2;
 #endif //PROGA3_A_KEYSPACE2_H

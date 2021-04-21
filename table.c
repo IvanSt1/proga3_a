@@ -57,7 +57,7 @@ KeySpace1 * findkpar(Table *t,int kpar,int *kol){
 
 int insert(Table* t, int k1,int par, char *k2, char * information) {
     int h,i,a=0,x,kol;
-    KeySpace2 *ks2,ks1;
+    KeySpace2 ks2;
     if (findk1(t, k1) != NULL) return 1;
     else {
         if (t->msize1 == t->csize1) return 2;
@@ -75,18 +75,26 @@ int insert(Table* t, int k1,int par, char *k2, char * information) {
                         t->ks2[h].key = k2;
                         t->ks2[h].realise = 0;
                         t->ks2[h].next = NULL;
+                        t->ks2[h].before=NULL;
+                        item->ks2=(KeySpace2*)calloc(sizeof (KeySpace2),1);
+                        *item->ks2=t->ks2[h];
                         t->ks2[h].info = item;
+
                     }
                     else
                     {
-                        ks1.key=k2;
-                        ks1.info=item;
-                        ks1.next = NULL;
-                        ks1.realise=t->ks2[h].realise+1;
+                        ks2.key=k2;
+
+                        ks2.before=NULL;
+                        ks2.realise=t->ks2[h].realise+1;
                         item->realise = t->ks2[h].realise+1;
-                        ks1.next=(KeySpace2*)calloc(sizeof (KeySpace2),1);
-                        (*ks1.next)=t->ks2[h];
-                        t->ks2[h]=ks1;
+                        ks2.info=item;
+                        t->ks2[h].before=(KeySpace2*)calloc(sizeof (KeySpace2),1);
+                        *t->ks2[h].before=ks2;
+                        ks2.next=(KeySpace2*)calloc(sizeof (KeySpace2),1);
+                        (*ks2.next)=t->ks2[h];
+                        t->ks2[h]=ks2;
+                        item->ks2=&t->ks2[h];
                     }
                 for (int i=0; i<t->msize1;i++) {
                     if(t->ks1[i].key==0) {
@@ -121,53 +129,13 @@ int delete(Table *t, int k1, char *k2) {
     if (i == t->msize1) {
         return 0;
     }
-    KeySpace2 ks2,newks2,bnewks2;
-    ks2=(t->ks2[h]);
-    newks2=t->ks2[h];
-    int kol=0;
-    while ((ks2.next!=NULL)){
-        if ((strcmp(ks2.key, k2)!=0)&&(ks2.info->key1!=k1 )) {
-            ks2=*ks2.next;
-
-        }
-        else {
-            if (kol == 0) {
-                newks2 = ks2;
-                kol++;
-                bnewks2 = newks2;
-            } else {
-                kol++;
-                newks2.next = (KeySpace2 *) calloc(sizeof(KeySpace2), 1);
-                *newks2.next = ks2;
-                newks2 = *newks2.next;
-            }
-            ks2 = *ks2.next;
-        }
-    }
-    if (kol==0) {
-        if ((strcmp(ks2.key, k2) != 0) && (ks2.info->key1 != k1)) {
-            ks2 = *ks2.next;
-        } else {
-            beginks2 = ks2;
-            kol++;
-            bbeginks2 = beginks2;
-        }
-    }
-    else{
-        if ((strcmp(ks2.key, k2)!=0)&&(ks2.info->key1!=k1 )) {
-            ks2=*ks2.next;
-
-        }
-        else {
-            kol++;
-            beginks2.next = (KeySpace2 *) calloc(sizeof(KeySpace2), 1);
-            *beginks2.next = ks2;
-            beginks2 = *beginks2.next;
-        }
-    }
-
-
-    t->ks2[h]=bbeginks2;
+    Item *item;
+    item=t->ks1[i].info;
+    KeySpace2 *ks2;
+    ks2=item->ks2;
+    *ks2->before->next=*ks2->next;
+    free (item);
+    free (ks2);
     free(t->ks1[i].info->inf);
     free(t->ks1[i].info);
     t->ks1[i].key=0;

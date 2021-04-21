@@ -162,7 +162,7 @@ int D_Find_Realises(Table *ptab){
                 printf("key1: %d| key2: %s | info: %s| realise: %d\n", ks2->info->key1, ks2->key, ks2->info->inf,ks2->realise);
                 kol++;
             }
-            (*ks2)=(*ks2->next);
+            ks2=ks2->next;
         }
         if(strcmp(ks2->key,k2)==0) {
             printf("key1: %d| key2: %s | info: %s| realise: %d\n", ks2->info->key1, ks2->key, ks2->info->inf,ks2->realise);
@@ -185,7 +185,7 @@ int D_Find_Curent_Realise(Table *ptab){
     }
     printf("Enter realise: -->");
     Get_Int0(&r);
-    KeySpace2* ks2;
+    KeySpace2 *ks2;
     ks2=findk2(ptab,k2);
     if (ks2==NULL){
         printf("There is not such key");
@@ -196,7 +196,7 @@ int D_Find_Curent_Realise(Table *ptab){
                 printf("key1: %d| key2: %s | info: %s| realise: %d\n", ks2->info->key1, ks2->key, ks2->info->inf,ks2->realise);
                 kol++;
             }
-            (*ks2)=(*ks2->next);
+            (ks2)=(ks2->next);
         }
         if((strcmp(ks2->key,k2)==0)&&(ks2->realise==r)) {
             printf("key1: %d| key2: %s | info: %s| realise: %d\n", ks2->info->key1, ks2->key, ks2->info->inf,ks2->realise);
