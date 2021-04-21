@@ -96,7 +96,7 @@ int D_Findk1(Table*ptab){
     return 1;
 }
 int D_Delete(Table *ptab){
-    /*
+
     char* k2=NULL;
     int rc,k1;
     int l;
@@ -109,7 +109,7 @@ int D_Delete(Table *ptab){
     rc=delete(ptab,k1,k2);
     if(rc==0) printf("There is not such key.");
     if(rc==1) printf("Successfull deletion.\n");
-    */
+
     return 1;
 }
 
@@ -117,11 +117,6 @@ int D_Delete(Table *ptab){
 int D_Show(Table*ptab){
     for(int i=0;i<ptab->msize1;i++) {
         if (ptab->ks1[i].key != 0) {
-            int a=ptab->ks1[i].key;
-            int b=ptab->ks1[i].par;
-            char *c= ptab->ks1[i].info->key2;
-            char* d=ptab->ks1[i].info->inf;
-            int e=ptab->ks1[i].info->realise;
             printf("key1: %d | parkey:%d |key2: %s | info: %s | realise: %d\n", ptab->ks1[i].key, ptab->ks1[i].par, ptab->ks1[i].info->key2, ptab->ks1[i].info->inf, ptab->ks1[i].info->realise);
         }
     }

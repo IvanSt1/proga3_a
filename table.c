@@ -113,23 +113,72 @@ KeySpace2 *findk2(Table*t, char* k2){
 
 int delete(Table *t, int k1, char *k2) {
     int i = 0;
-    while (i < t->csize1 && (strcmp(t->ks2[i].key, k2)) && (t->ks1[i].key != k1)) {
-        i++;
+    int h= Hesh(t,k2);
+    for(int i=0;i<t->msize1;i++){
+        if ((strcmp(t->ks1->info->key2,k2)==0)&&(t->ks1[i].key == k1))
+            break;
     }
-    if (i == t->csize1) return 0;
-    else {
-        int k = t->ks1[i].key;
-        free(t->ks1[i].info->inf);
-        free(t->ks1[i].info);
-        if (i != t->csize1 - 1) {
-            t->ks1[i] = t->ks1[(t->csize1 - 1)];
+    if (i == t->msize1) {
+        return 0;
+    }
+    KeySpace2 ks2,newks2,bnewks2;
+    ks2=(t->ks2[h]);
+    newks2=t->ks2[h];
+    int kol=0;
+    while ((ks2.next!=NULL)){
+        if ((strcmp(ks2.key, k2)!=0)&&(ks2.info->key1!=k1 )) {
+            ks2=*ks2.next;
+
+        }
+        else {
+            if (kol == 0) {
+                newks2 = ks2;
+                kol++;
+                bnewks2 = newks2;
+            } else {
+                kol++;
+                newks2.next = (KeySpace2 *) calloc(sizeof(KeySpace2), 1);
+                *newks2.next = ks2;
+                newks2 = *newks2.next;
+            }
+            ks2 = *ks2.next;
+        }
+    }
+    if (kol==0) {
+        if ((strcmp(ks2.key, k2) != 0) && (ks2.info->key1 != k1)) {
+            ks2 = *ks2.next;
+        } else {
+            beginks2 = ks2;
+            kol++;
+            bbeginks2 = beginks2;
+        }
+    }
+    else{
+        if ((strcmp(ks2.key, k2)!=0)&&(ks2.info->key1!=k1 )) {
+            ks2=*ks2.next;
+
+        }
+        else {
+            kol++;
+            beginks2.next = (KeySpace2 *) calloc(sizeof(KeySpace2), 1);
+            *beginks2.next = ks2;
+            beginks2 = *beginks2.next;
+        }
+    }
+
+
+    t->ks2[h]=bbeginks2;
+    free(t->ks1[i].info->inf);
+    free(t->ks1[i].info);
+    t->ks1[i].key=0;
+    t->csize1 = t->csize1 - 1;
+    for (int i = 0; i < t->msize1; i++) {
+        if (t->ks1[i].key != 0) {
+            if (t->ks1[i].par == k1)
+                t->ks1[i].par = 0;
         }
 
-        t->csize1 = t->csize1 - 1;
-        for (int i = 0; i < t->csize1; i++) {
-            if (t->ks1->par == k)
-                t->ks1->par = 0;
-        }
-        return 1;
     }
+    return 1;
+
 }
