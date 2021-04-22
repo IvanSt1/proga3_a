@@ -56,7 +56,7 @@ KeySpace1 * findkpar(Table *t,int kpar,int *kol){
 
 
 int insert(Table* t, int k1,int par, char *k2, char * information) {
-    int h,i,a=0,x,kol;
+    int h;
     KeySpace2 ks2;
     if (findk1(t, k1) != NULL) return 1;
     else {
@@ -76,23 +76,19 @@ int insert(Table* t, int k1,int par, char *k2, char * information) {
                         t->ks2[h].realise = 0;
                         t->ks2[h].next = NULL;
                         t->ks2[h].before=NULL;
-                        item->ks2=(KeySpace2*)calloc(sizeof (KeySpace2),1);
-                        *item->ks2=t->ks2[h];
+                        item->ks2=&t->ks2[h];
                         t->ks2[h].info = item;
 
                     }
                     else
                     {
                         ks2.key=k2;
-
                         ks2.before=NULL;
                         ks2.realise=t->ks2[h].realise+1;
                         item->realise = t->ks2[h].realise+1;
                         ks2.info=item;
-                        t->ks2[h].before=(KeySpace2*)calloc(sizeof (KeySpace2),1);
-                        *t->ks2[h].before=ks2;
-                        ks2.next=(KeySpace2*)calloc(sizeof (KeySpace2),1);
-                        (*ks2.next)=t->ks2[h];
+                        t->ks2[h].before=&ks2;
+                        ks2.next=&t->ks2[h];
                         t->ks2[h]=ks2;
                         item->ks2=&t->ks2[h];
                     }
