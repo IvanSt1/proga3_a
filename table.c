@@ -1,7 +1,5 @@
 #include"dialog.h"
 #include <string.h>
-#include "keyspace1.h"
-#include "keyspace2.h"
 #include "item.h"
 #include "dialog.h"
 #include "Get.h"
@@ -57,7 +55,7 @@ KeySpace1 * findkpar(Table *t,int kpar,int *kol){
 
 int insert(Table* t, int k1,int par, char *k2, char * information) {
     int h;
-    KeySpace2 ks2;
+    KeySpace2 newks2;
     if (findk1(t, k1) != NULL) return 1;
     else {
         if (t->msize1 == t->csize1) return 2;
@@ -69,27 +67,26 @@ int insert(Table* t, int k1,int par, char *k2, char * information) {
                 item->key2 = k2;
                 item->inf = information;
                    h=Hesh(t,k2);
-                    if (t->ks2[h].realise==-1)
+                    if (t->ks2[h]==NULL)
                     {
                         item->realise = 0;
-                        t->ks2[h].key = k2;
-                        t->ks2[h].realise = 0;
-                        t->ks2[h].next = NULL;
-                        t->ks2[h].before=NULL;
-                        item->ks2=&t->ks2[h];
-                        t->ks2[h].info = item;
+                       newks2.next=NULL;
+                       newks2.previous=NULL;
+                       newks2.info=item;
+                       t->ks2[h]=&newks2;
+
 
                     }
                     else
                     {
-                        ks2.key=k2;
-                        ks2.before=NULL;
-                        ks2.realise=t->ks2[h].realise+1;
-                        item->realise = t->ks2[h].realise+1;
-                        ks2.info=item;
-                        t->ks2[h].before=&ks2;
-                        ks2.next=&t->ks2[h];
-                        t->ks2[h]=ks2;
+                        newks2.key=k2;
+                        newks2.previous=NULL;
+                        newks2.realise=t->ks2[h]->realise+1;
+                        item->realise = t->ks2[h]->realise+1;
+                        newks2.info=&item;
+                        t->ks2[h]->previous=&newks2;
+                        newks2.next=&t->ks2[h];
+                        t->ks2[h]=&newks2;
                         item->ks2=&t->ks2[h];
                     }
                 for (int i=0; i<t->msize1;i++) {
@@ -108,11 +105,11 @@ int insert(Table* t, int k1,int par, char *k2, char * information) {
 }
 KeySpace2 *findk2(Table*t, char* k2){
     int h= Hesh(t,k2);
-    if (t->ks2[h].realise==-1){
+    if (t->ks2[h]==NULL){
         return 0;
     }
     else
-        return &(t->ks2[h]);
+        return (t->ks2[h]);
 }
 
 int delete(Table *t, int k1, char *k2) {
@@ -129,7 +126,7 @@ int delete(Table *t, int k1, char *k2) {
     item=t->ks1[i].info;
     KeySpace2 *ks2;
     ks2=item->ks2;
-    *ks2->before->next=*ks2->next;
+    ks2->previous->next=ks2->next;
     free (item);
     free (ks2);
     free(t->ks1[i].info->inf);

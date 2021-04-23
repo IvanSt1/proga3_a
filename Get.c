@@ -1,7 +1,5 @@
 #include"dialog.h"
 #include <string.h>
-#include "keyspace1.h"
-#include "keyspace2.h"
 #include "item.h"
 #include "dialog.h"
 #include "Get.h"

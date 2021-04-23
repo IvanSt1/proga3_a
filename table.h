@@ -4,12 +4,11 @@
 
 #ifndef PROGA3_A_TABLE_H
 #define PROGA3_A_TABLE_H
-#include "keyspace2.h"
-#include "keyspace1.h"
+
 #include "item.h"
 typedef struct Table{
     KeySpace1 *ks1;
-    KeySpace2 *ks2;
+    KeySpace2 **ks2;
     int msize1;
     int csize1;
     int strl;

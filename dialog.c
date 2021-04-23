@@ -1,7 +1,5 @@
 #include"dialog.h"
 #include <string.h>
-#include "keyspace1.h"
-#include "keyspace2.h"
 #include "item.h"
 #include "dialog.h"
 #include "Get.h"
@@ -151,7 +149,7 @@ int D_Find_Realises(Table *ptab){
     if (k2==NULL){
         return 0;
     }
-    KeySpace2* ks2;
+    KeySpace2 *ks2;
     ks2=findk2(ptab,k2);
     if (ks2==NULL){
         printf("There is not such key");

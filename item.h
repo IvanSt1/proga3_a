@@ -5,7 +5,6 @@
 #ifndef PROGA3_A_ITEM_H
 #define PROGA3_A_ITEM_H
 
-#include "keyspace2.h"
 
 typedef struct Item{
     char* inf;
@@ -14,4 +13,16 @@ typedef struct Item{
     int realise;
     struct KeySpace2 *ks2;
 } Item;
+typedef struct KeySpace1{
+    int key;
+    int par;
+    Item *info;
+} KeySpace1;
+typedef struct KeySpace2{
+    char* key;
+    Item *info;
+    int  realise;
+    struct KeySpace2 *next;
+    struct KeySpace2 *previous;
+} KeySpace2;
 #endif //PROGA3_A_ITEM_H

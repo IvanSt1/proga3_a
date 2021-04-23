@@ -1,7 +1,5 @@
 #include"dialog.h"
 #include <string.h>
-#include "keyspace1.h"
-#include "keyspace2.h"
 #include "item.h"
 #include "dialog.h"
 #include "Get.h"
@@ -21,22 +19,22 @@ int main(){
     Get_Int(&len);
     Table table;
     table.ks1=calloc(sizeof(KeySpace1),size1);
-    table.ks2=calloc(sizeof(KeySpace2),size2);
+    table.ks2=(KeySpace2 **)calloc(sizeof(KeySpace2*),size2);
     table.msize1=size1;
     table.csize1=0;
     table.msize2=size2;
     table.strl=len;
-    for (int i=0; i<size2;i++){
-        table.ks2[i].realise=-1;
-    }
     for (int i=0; i<size1;i++){
         table.ks1[i].key=0;
     }
+
     int rc;
-    while(rc=dialog(msgs,NMgsgs)){
+    rc = dialog(msgs, NMgsgs);
+    while(rc){
         if(!f[rc](&table)){
             break;
         }
+        rc = dialog(msgs, NMgsgs);
     }
     free(table.ks1);
     free(table.ks2);
