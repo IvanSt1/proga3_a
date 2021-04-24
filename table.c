@@ -46,8 +46,10 @@ KeySpace1 *findkpar(Table *t, int kpar, int *kol) {
             }
         }
     }
-    if (*kol == 0)
+    if (*kol == 0) {
+        free(ks1);
         return NULL;
+    }
     else
         return ks1;
 }
@@ -55,35 +57,36 @@ KeySpace1 *findkpar(Table *t, int kpar, int *kol) {
 
 int insert(Table *t, int k1, int par, char *k2, char *information) {
     int h;
-    KeySpace2 newks2;
     if (findk1(t, k1) != NULL) return 1;
     else {
         if (t->msize1 == t->csize1) return 2;
         else {
             if ((findk1(t, par) == NULL) && (par != 0)) return 3;
             else {
+                KeySpace2 *newks2= calloc(sizeof (KeySpace2*),1);
                 Item *item = malloc(sizeof(Item));
                 item->key1 = k1;
                 item->key2 = k2;
                 item->inf = information;
                 h = Hesh(t, k2);
                 if (t->ks2[h] == NULL) {
+
                     item->realise = 0;
-                    newks2.realise=0;
-                    newks2.key = k2;
-                    newks2.next = NULL;
-                    newks2.previous = NULL;
-                    newks2.info = &item;
-                    t->ks2[h] = &newks2;
+                    newks2->realise=0;
+                    newks2->key = k2;
+                    newks2->next = NULL;
+                    newks2->previous = NULL;
+                    newks2->info = item;
+                    t->ks2[h] = newks2;
                 } else {
-                    newks2.key = k2;
-                    newks2.previous = NULL;
-                    newks2.realise = t->ks2[h]->realise + 1;
+                    newks2->key = k2;
+                    newks2->previous = NULL;
+                    newks2->realise = t->ks2[h]->realise + 1;
                     item->realise = t->ks2[h]->realise + 1;
-                    newks2.info = &item;
-                    t->ks2[h]->previous = &newks2;
-                    newks2.next = t->ks2[h];
-                    t->ks2[h] = &newks2;
+                    newks2->info = item;
+                    t->ks2[h]->previous = newks2;
+                    newks2->next = t->ks2[h];
+                    t->ks2[h] = newks2;
                     item->ks2 = t->ks2[h];
                 }
                 for (int i = 0; i < t->msize1; i++) {
