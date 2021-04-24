@@ -54,21 +54,22 @@ char *Get_Str() {
     return res;
 }
 
-int lenstr(char *s) {
-    int i = 0;
-    while (s[i] != '\0') {
-        i++;
-    }
-    return i;
-}
 
 char *Get_Strk2(Table *t) {
     char *res = NULL;
     res = Get_Str();
-    while (lenstr(res) > t->strl) {
+    while (strlen(res) > t->strl) {
         printf("wrong length of string\n");
         res = Get_Str();
     }
     return res;
 }
 
+
+int Hesh(Table *t, char *s) {
+    int sum = 0;
+    for (int i = 0; i < strlen(s); i++) {
+        sum += (int) s[i];
+    }
+    return (sum % t->strl);
+}
