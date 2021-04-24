@@ -6,22 +6,22 @@
 #define PROGA3_A_ITEM_H
 
 
-typedef struct Item{
-    char* inf;
+typedef struct Item {
+    char *inf;
     int key1;
-    char* key2;
+    char *key2;
     int realise;
     struct KeySpace2 *ks2;
 } Item;
-typedef struct KeySpace1{
+typedef struct KeySpace1 {
     int key;
     int par;
     Item *info;
 } KeySpace1;
-typedef struct KeySpace2{
-    char* key;
+typedef struct KeySpace2 {
+    char *key;
     Item *info;
-    int  realise;
+    int realise;
     struct KeySpace2 *next;
     struct KeySpace2 *previous;
 } KeySpace2;

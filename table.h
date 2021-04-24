@@ -6,7 +6,8 @@
 #define PROGA3_A_TABLE_H
 
 #include "item.h"
-typedef struct Table{
+
+typedef struct Table {
     KeySpace1 *ks1;
     KeySpace2 **ks2;
     int msize1;
@@ -14,10 +15,15 @@ typedef struct Table{
     int strl;
     int msize2;
 } Table;
-int insert(Table* ptab, int k1,int par, char* k2, char * info);
-Item * find(Table *ptab,int k1, char *k2);
-Item * findk1(Table *t,int k1);
-KeySpace1 * findkpar(Table *t,int kpar, int *kol);
-KeySpace2 *findk2(Table*t, char* k2);
+
+int insert(Table *ptab, int k1, int par, char *k2, char *info);
+
+Item *find(Table *ptab, int k1, char *k2);
+
+Item *findk1(Table *t, int k1);
+
+KeySpace1 *findkpar(Table *t, int kpar, int *kol);
+
 int delete(Table *ptab, int k1, char *k2);
+
 #endif //PROGA3_A_TABLE_H
