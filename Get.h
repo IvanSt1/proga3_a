@@ -15,6 +15,4 @@ char *Get_Strk2(Table *t);
 
 int Hesh(Table *t, char *s);
 
-int lenstr(char *s);
-
 #endif //PROGA3_A_GET_H
