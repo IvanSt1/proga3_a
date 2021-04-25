@@ -1,10 +1,9 @@
-#include"dialog.h"
+
 #include <string.h>
 #include "item.h"
 #include "Get.h"
 #include "table.h"
 #include <stdlib.h>
-#include <stdio.h>
 
 Item *find(Table *t, int k1, char *k2) {
     int i;

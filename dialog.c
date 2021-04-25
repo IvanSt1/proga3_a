@@ -28,6 +28,8 @@ int D_Add(Table *ptab) {
         return 0;
     rc = insert(ptab, k1, par, k2, info);
     printf("%s: %d, %s\n", errmsgs[rc], k1, k2);
+    free(k2);
+    free(info);
     return 1;
 }
 
@@ -63,14 +65,17 @@ int D_Find(Table *ptab) {
     if (ptab->csize1 != 0) {
         rc = find(ptab, k1, k2);
         if (rc == NULL) {
+            free(k2);
             printf("There is not such key.");
             return 1;
         } else {
             printf("key1: %d | key2: %s | info: %s | realise: %d\n", rc->key1, rc->key2, rc->inf, rc->realise);
+            free(k2);
             return 1;
         }
     } else
         printf("Empty table\n");
+    free(k2);
     return 1;
 }
 
@@ -97,7 +102,6 @@ int D_Delete(Table *ptab) {
 
     char *k2 = NULL;
     int rc, k1;
-    int l;
     printf("Enter key1: -->");
     Get_Int(&k1);
     printf("Enter key2: -->");
@@ -105,9 +109,9 @@ int D_Delete(Table *ptab) {
     if (k2 == NULL)
         return 0;
     rc = delete(ptab, k1, k2);
-    if (rc == 0) printf("There is not such key.");
-    if (rc == 1) printf("Successfull deletion.\n");
-
+    if (rc == 0) printf("There is not such key.\n");
+    if (rc == 1) printf("Successful deletion.\n");
+    free(k2);
     return 1;
 }
 
@@ -173,10 +177,11 @@ int D_Find_Realises(Table *ptab) {
             printf("There is not such key");
         }
     }
+    free(k2);
     return 1;
 }
 
-int D_Find_Curent_Realise(Table *ptab) {
+int D_Find_Current_Realise(Table *ptab) {
     char *k2 = NULL;
     int kol = 0;
     int r;
@@ -191,7 +196,7 @@ int D_Find_Curent_Realise(Table *ptab) {
     int h = Hesh(ptab, k2);
     ks2 = ptab->ks2[h];
     if (ks2 == NULL) {
-        printf("There is not such key");
+        printf("There is not such key\n");
     } else {
         while (ks2->next != NULL) {
             if ((strcmp(ks2->key, k2) == 0) && (ks2->realise == r)) {
@@ -207,13 +212,84 @@ int D_Find_Curent_Realise(Table *ptab) {
             kol++;
         }
         if (kol == 0) {
-            printf("There is not such key and realise");
+            printf("There is not such key and realise\n");
         }
     }
-
+    free(k2);
     return 1;
 }
 int D_Reorg(Table *ptab){
+    char *k2 = NULL;
+    printf("Enter key2: -->");
+    k2 = Get_Strk2(ptab);
+    if (k2 == NULL) {
+        return 0;
+    }
+    int h= Hesh(ptab,k2);
+    if (ptab->ks2[h]==NULL){
+        printf("There is not such key.\n");
+        return 1;
+    }
+    while (ptab->ks2[h]->next !=NULL){
+        delete(ptab,ptab->ks2[h]->next->info->key1,ptab->ks2[h]->next->key);
+    }
+    printf("Successful deletion.\n");
+    free(k2);
+    return 1;
+}
 
+int D_Delete_Key1(Table *ptab){
+    int k1;
+    Item *rc = NULL;
+    printf("Enter key1: -->");
+    Get_Int(&k1);
+    if (ptab->csize1 != 0) {
+        rc = findk1(ptab, k1);
+        if (rc == NULL) {
+            printf("There is not such key.");
+            return 1;
+        } else {
+            delete(ptab,rc->key1,rc->key2);
+            printf("Successful deletion.\n");
+            return 1;
+        }
+    } else
+        printf("Empty table\n");
+    return 1;
+}
+int D_Delete_Key2(Table *ptab){
+    char *k2 = NULL;
+    printf("Enter key2: -->");
+    k2 = Get_Strk2(ptab);
+    if (k2 == NULL) {
+        return 0;
+    }
+    int h= Hesh(ptab,k2);
+    if (ptab->ks2[h]==NULL){
+        printf("There is not such key.\n");
+        return 1;
+    }
+    KeySpace2 *k=NULL;
+    while (ptab->ks2[h]->next !=NULL){
+        if(strcmp(ptab->ks2[h]->key,k2)==0) {
+            delete(ptab, ptab->ks2[h]->info->key1, ptab->ks2[h]->key);
+        }
+        else{
+            if (k==NULL){
+                k=ptab->ks2[h];
+                ptab->ks2[h]=ptab->ks2[h]->next;
+            }
+            else{
+                ptab->ks2[h]=ptab->ks2[h]->next;
+            }
+        }
+    }
+    if(strcmp(ptab->ks2[h]->key,k2)==0) {
+        delete(ptab, ptab->ks2[h]->info->key1, ptab->ks2[h]->key);
+    }
+    if (k!=NULL)
+        ptab->ks2[h]=k;
+    printf("Successful deletion.\n");
+    free(k2);
     return 1;
 }

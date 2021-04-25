@@ -5,6 +5,8 @@
 #ifndef PROGA3_A_GET_H
 #define PROGA3_A_GET_H
 
+#include "table.h"
+
 int Get_Int(int *a);
 
 int Get_Int0(int *a);

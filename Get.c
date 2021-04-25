@@ -1,7 +1,4 @@
-#include"dialog.h"
 #include <string.h>
-#include "item.h"
-#include "dialog.h"
 #include "Get.h"
 #include "table.h"
 #include <stdlib.h>
