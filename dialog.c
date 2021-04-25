@@ -28,8 +28,6 @@ int D_Add(Table *ptab) {
         return 0;
     rc = insert(ptab, k1, par, k2, info);
     printf("%s: %d, %s\n", errmsgs[rc], k1, k2);
-    free(k2);
-    free(info);
     return 1;
 }
 
@@ -75,7 +73,6 @@ int D_Find(Table *ptab) {
         }
     } else
         printf("Empty table\n");
-    free(k2);
     return 1;
 }
 
@@ -111,7 +108,6 @@ int D_Delete(Table *ptab) {
     rc = delete(ptab, k1, k2);
     if (rc == 0) printf("There is not such key.\n");
     if (rc == 1) printf("Successful deletion.\n");
-    free(k2);
     return 1;
 }
 
@@ -177,7 +173,6 @@ int D_Find_Realises(Table *ptab) {
             printf("There is not such key");
         }
     }
-    free(k2);
     return 1;
 }
 
@@ -215,7 +210,7 @@ int D_Find_Current_Realise(Table *ptab) {
             printf("There is not such key and realise\n");
         }
     }
-    free(k2);
+
     return 1;
 }
 int D_Reorg(Table *ptab){
@@ -234,7 +229,6 @@ int D_Reorg(Table *ptab){
         delete(ptab,ptab->ks2[h]->next->info->key1,ptab->ks2[h]->next->key);
     }
     printf("Successful deletion.\n");
-    free(k2);
     return 1;
 }
 
@@ -290,6 +284,5 @@ int D_Delete_Key2(Table *ptab){
     if (k!=NULL)
         ptab->ks2[h]=k;
     printf("Successful deletion.\n");
-    free(k2);
     return 1;
 }

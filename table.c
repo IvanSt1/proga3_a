@@ -93,7 +93,6 @@ int insert(Table *t, int k1, int par, char *k2, char *information) {
                         t->ks1[i].key = k1;
                         t->ks1[i].par = par;
                         t->ks1[i].info = item;
-                        item->ks1=&t->ks1[i];
                         break;
                     }
                 }
