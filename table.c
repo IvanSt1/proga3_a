@@ -76,6 +76,7 @@ int insert(Table *t, int k1, int par, char *k2, char *information) {
                     newks2->next = NULL;
                     newks2->previous = NULL;
                     newks2->info = item;
+                    item->ks2 = newks2;
                     t->ks2[h] = newks2;
                 } else {
                     newks2->key = k2;
@@ -86,13 +87,14 @@ int insert(Table *t, int k1, int par, char *k2, char *information) {
                     t->ks2[h]->previous = newks2;
                     newks2->next = t->ks2[h];
                     t->ks2[h] = newks2;
-                    item->ks2 = t->ks2[h];
+                    item->ks2 = newks2;
                 }
                 for (int i = 0; i < t->msize1; i++) {
                     if (t->ks1[i].key == 0) {
                         t->ks1[i].key = k1;
                         t->ks1[i].par = par;
                         t->ks1[i].info = item;
+                        item->ks1=&t->ks1[i];
                         break;
                     }
                 }
@@ -105,25 +107,50 @@ int insert(Table *t, int k1, int par, char *k2, char *information) {
 
 int delete(Table *t, int k1, char *k2) {
     int i = 0;
-    int h = Hesh(t, k2);
-    for (int i = 0; i < t->msize1; i++) {
-        if ((strcmp(t->ks1->info->key2, k2) == 0) && (t->ks1[i].key == k1))
-            break;
+    // нахождение по первому пространству элемент который нужно удалить
+    for (; i < t->msize1; ++i) {
+        if (t->ks1[i].key != 0) {
+            if ((strcmp(t->ks1[i].info->key2, k2) == 0) && (t->ks1[i].key == k1)) {
+                break;
+            }
+        }
     }
     if (i == t->msize1) {
         return 0;
     }
     Item *item;
     item = t->ks1[i].info;
-    KeySpace2 *ks2;
-    ks2 = item->ks2;
-    ks2->previous->next = ks2->next;
-    free(item);
-    free(ks2);
-    free(t->ks1[i].info->inf);
-    free(t->ks1[i].info);
+    KeySpace2 *del_ks2;
+    del_ks2 = item->ks2;
+    // удаление из второго пространства ключей
+    if (del_ks2->next==NULL){
+        if(del_ks2->previous==NULL){ //единственный элемент
+            int h = Hesh(t, k2);
+            t->ks2[h]=NULL;
+        }
+        else{// последний элемент
+            del_ks2->previous->next=NULL;
+        }
+    }
+    else
+    {
+        if (del_ks2->previous==NULL){ //первый элемент
+            int h = Hesh(t, k2);
+            del_ks2->next->previous=NULL;
+            t->ks2[h]=del_ks2->next;
+        }
+        else{ // не крайний элемент
+            del_ks2->previous->next = del_ks2->next;
+            del_ks2->next->previous=del_ks2->previous;
+
+        }
+    }
+    //удаление из первого
     t->ks1[i].key = 0;
+    t->ks1[i].info=NULL;
+    t->ks1[i].par=0;
     t->csize1 = t->csize1 - 1;
+    // замена родительских ключей на нули
     for (int i = 0; i < t->msize1; i++) {
         if (t->ks1[i].key != 0) {
             if (t->ks1[i].par == k1) {
@@ -132,6 +159,9 @@ int delete(Table *t, int k1, char *k2) {
         }
 
     }
+    //очищение памяти
+    free(item);
+    free(del_ks2);
     return 1;
 
 }

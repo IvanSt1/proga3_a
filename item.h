@@ -12,6 +12,7 @@ typedef struct Item {
     char *key2;
     int realise;
     struct KeySpace2 *ks2;
+    struct KeySpace1 *ks1;
 } Item;
 typedef struct KeySpace1 {
     int key;

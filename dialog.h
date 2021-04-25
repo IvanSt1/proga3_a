@@ -25,4 +25,6 @@ int D_Find_Curent_Realise(Table *ptab);
 
 int D_Findk1(Table *ptab);
 
+int D_Reorg(Table *ptab);
+
 #endif //PROGA3_A_DIALOG_H

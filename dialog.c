@@ -213,3 +213,7 @@ int D_Find_Curent_Realise(Table *ptab) {
 
     return 1;
 }
+int D_Reorg(Table *ptab){
+
+    return 1;
+}
