@@ -157,7 +157,10 @@ int delete(Table *t, int k1, char *k2) {
         }
 
     }
+
     //очищение памяти
+    free(item->key2);
+    free(item->inf);
     free(item);
     free(del_ks2);
     return 1;
