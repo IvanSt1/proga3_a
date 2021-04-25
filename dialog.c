@@ -1,7 +1,6 @@
 #include"dialog.h"
 #include <string.h>
 #include "item.h"
-#include "dialog.h"
 #include "Get.h"
 #include "table.h"
 #include <stdlib.h>
@@ -11,7 +10,6 @@ const char *errmsgs[] = {"OK", "Duplicate key", "Table overflow", "Wrong parent 
 
 int D_Add(Table *ptab) {
     int rc;
-    int l;
     int k1;
     int par;
     char *k2 = NULL;
@@ -140,7 +138,7 @@ int D_ParFind(Table *ptab) {
                    t[i].info->inf, t[i].info->realise);
         }
     }
-
+    free(t);
     return 1;
 }
 

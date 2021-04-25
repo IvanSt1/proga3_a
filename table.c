@@ -49,8 +49,7 @@ KeySpace1 *findkpar(Table *t, int kpar, int *kol) {
     if (*kol == 0) {
         free(ks1);
         return NULL;
-    }
-    else
+    } else
         return ks1;
 }
 
@@ -63,7 +62,7 @@ int insert(Table *t, int k1, int par, char *k2, char *information) {
         else {
             if ((findk1(t, par) == NULL) && (par != 0)) return 3;
             else {
-                KeySpace2 *newks2= calloc(sizeof (KeySpace2*),1);
+                KeySpace2 *newks2 = calloc(sizeof(KeySpace2), 1);
                 Item *item = malloc(sizeof(Item));
                 item->key1 = k1;
                 item->key2 = k2;
@@ -72,7 +71,7 @@ int insert(Table *t, int k1, int par, char *k2, char *information) {
                 if (t->ks2[h] == NULL) {
 
                     item->realise = 0;
-                    newks2->realise=0;
+                    newks2->realise = 0;
                     newks2->key = k2;
                     newks2->next = NULL;
                     newks2->previous = NULL;
@@ -127,8 +126,9 @@ int delete(Table *t, int k1, char *k2) {
     t->csize1 = t->csize1 - 1;
     for (int i = 0; i < t->msize1; i++) {
         if (t->ks1[i].key != 0) {
-            if (t->ks1[i].par == k1)
+            if (t->ks1[i].par == k1) {
                 t->ks1[i].par = 0;
+            }
         }
 
     }
