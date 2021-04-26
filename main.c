@@ -17,19 +17,12 @@ int main() {
     int size1, size2, len;
     printf("Enter max size of ks1 table\n");
     Get_Int(&size1);
-    if(size1==0){
-        return 0;
-    }
+
     printf("Enter max size of ks2 table\n");
     Get_Int(&size2);
-    if(size1==0){
-        return 0;
-    }
+
     printf("Length of key2\n");
     Get_Int(&len);
-    if(size1==0){
-        return 0;
-    }
     Table table;
     table.ks1 = calloc(sizeof(KeySpace1), size1);
     table.ks2 = (KeySpace2 **) calloc(sizeof(KeySpace2 *), size2);
