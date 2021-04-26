@@ -9,6 +9,7 @@ int Get_Int(int *a) {
     while (n == 0) {
         n = scanf("%d", a);
         if (n == 0 || *a <= 0) {
+
             printf("Error reading positive integer value\n");
             scanf("%*[^\n]");
             n = 0;
@@ -38,6 +39,10 @@ char *Get_Str() {
     scanf("%*[\n]");
     do {
         n = scanf("%79[^\n]", buf);
+        if (n<0){
+            free(res);
+            return NULL;
+        }
         len += strlen(buf);
         if (n > 0) {
             res = realloc(res, len * sizeof(char) + 1);
